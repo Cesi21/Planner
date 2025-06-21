@@ -25,8 +25,8 @@
                             </SwipeView.RightItems>
                             <Frame Padding="10" Margin="0,5" HasShadow="True" BackgroundColor="White" CornerRadius="8">
                                 <StackLayout>
-                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
-                                    <Label Text="{Binding RepeatOnDays, Converter={StaticResource RepeatDaysConverter}}" FontAttributes="Italic" FontSize="12" />
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="Black" />
+                                    <Label Text="{Binding RepeatOnDays, Converter={StaticResource RepeatDaysConverter}}" FontAttributes="Italic" FontSize="12" TextColor="Black" />
                                 </StackLayout>
                             </Frame>
                         </SwipeView>

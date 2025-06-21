@@ -215,7 +215,9 @@ namespace Planner.Services
                             Name = template.Name,
                             RepeatInterval = template.RepeatInterval,
                             Date = date,
-                            IsCompleted = false
+                            IsCompleted = false,
+                            IsReminderEnabled = template.IsReminderEnabled,
+                            ReminderTime = template.ReminderTime
                         };
                         routines.Add(r);
                     }

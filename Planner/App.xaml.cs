@@ -1,10 +1,16 @@
-﻿namespace Planner
+﻿using Planner.Services;
+
+namespace Planner
 {
     public partial class App : Application
     {
-        public App()
+        private readonly ReminderService _reminderService;
+
+        public App(ReminderService reminderService)
         {
             InitializeComponent();
+            _reminderService = reminderService;
+            _ = _reminderService.RescheduleTodayRemindersAsync();
         }
 
         protected override Window CreateWindow(IActivationState? activationState)

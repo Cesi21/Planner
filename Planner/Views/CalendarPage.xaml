@@ -63,7 +63,7 @@
                                 <Frame Padding="10" Margin="0,5" HasShadow="True" BackgroundColor="White" CornerRadius="8">
                                     <Grid ColumnDefinitions="Auto,*" VerticalOptions="Center">
                                         <CheckBox IsChecked="{Binding IsCompleted}" CheckedChanged="OnRoutineChecked" VerticalOptions="Center" />
-                                        <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Center">
+                                        <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Center" TextColor="Black">
                                             <Label.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.EditRoutineCommand}" CommandParameter="{Binding .}" />
                                             </Label.GestureRecognizers>
