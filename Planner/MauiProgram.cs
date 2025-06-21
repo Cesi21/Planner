@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
+using Planner.Services;
+using Planner.ViewModels;
+using Planner.Views;
 
 namespace Planner
 {
@@ -16,8 +19,14 @@ namespace Planner
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
+
+            builder.Services.AddSingleton<DataService>();
+            builder.Services.AddTransient<GoalListViewModel>();
+            builder.Services.AddTransient<RoutineListViewModel>();
+            builder.Services.AddTransient<GoalListPage>();
+            builder.Services.AddTransient<RoutineListPage>();
 
             return builder.Build();
         }
