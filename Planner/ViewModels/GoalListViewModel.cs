@@ -26,8 +26,24 @@ namespace Planner.ViewModels
         [RelayCommand]
         private async Task AddGoal()
         {
-            var goal = new Goal { Title = "New Goal", DueDate = DateTime.Today };
+            var goal = new Goal { Title = "New Goal", TargetValue = 1 };
             await _dataService.AddGoalAsync(goal);
+            await LoadAsync();
+        }
+
+        [RelayCommand]
+        private async Task IncrementGoal(Goal goal)
+        {
+            if (goal.IsCompleted)
+                return;
+
+            goal.CurrentValue++;
+            if (goal.CurrentValue >= goal.TargetValue)
+            {
+                goal.IsCompleted = true;
+            }
+
+            await _dataService.UpdateGoalAsync(goal);
             await LoadAsync();
         }
     }

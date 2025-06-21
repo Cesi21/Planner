@@ -49,6 +49,17 @@ namespace Planner.Services
             await SaveAsync();
         }
 
+        public async Task UpdateGoalAsync(Goal goal)
+        {
+            await LoadAsync();
+            var index = _data.Goals.FindIndex(g => g.Id == goal.Id);
+            if (index >= 0)
+            {
+                _data.Goals[index] = goal;
+                await SaveAsync();
+            }
+        }
+
         public async Task<List<Routine>> GetRoutinesAsync()
         {
             await LoadAsync();
