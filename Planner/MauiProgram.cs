@@ -27,9 +27,11 @@ namespace Planner
             builder.Services.AddTransient<GoalListViewModel>();
             builder.Services.AddTransient<RoutineListViewModel>();
             builder.Services.AddTransient<CalendarViewModel>();
+            builder.Services.AddTransient<StatsViewModel>();
             builder.Services.AddTransient<GoalListPage>();
             builder.Services.AddTransient<RoutineListPage>();
             builder.Services.AddTransient<CalendarPage>();
+            builder.Services.AddTransient<StatsPage>();
 
             return builder.Build();
         }

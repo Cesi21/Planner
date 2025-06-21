@@ -18,4 +18,8 @@
         Title="Goals"
         ContentTemplate="{DataTemplate views:GoalListPage}"
         Route="GoalListPage" />
+    <ShellContent
+        Title="Stats"
+        ContentTemplate="{DataTemplate views:StatsPage}"
+        Route="StatsPage" />
 </Shell>

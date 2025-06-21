@@ -95,5 +95,44 @@ namespace Planner.Services
             }
             return result;
         }
+
+        public async Task<Dictionary<DateTime, List<Routine>>> GetRoutinesForRange(DateTime start, DateTime end)
+        {
+            await LoadAsync();
+            var result = new Dictionary<DateTime, List<Routine>>();
+            foreach (var kvp in _routinesByDate)
+            {
+                if (DateTime.TryParse(kvp.Key, out var date))
+                {
+                    if (date >= start && date <= end)
+                        result[date] = new List<Routine>(kvp.Value);
+                }
+            }
+            return result;
+        }
+
+        public async Task<int> GetTotalCompletedInRange(DateTime start, DateTime end)
+        {
+            var routines = await GetRoutinesForRange(start, end);
+            return routines.Values.Sum(list => list.Count(r => r.IsCompleted));
+        }
+
+        public async Task<int> GetTotalPlannedInRange(DateTime start, DateTime end)
+        {
+            var routines = await GetRoutinesForRange(start, end);
+            return routines.Values.Sum(list => list.Count);
+        }
+
+        public async Task<int> GetFullCompletionDaysInRange(DateTime start, DateTime end)
+        {
+            var routines = await GetRoutinesForRange(start, end);
+            int count = 0;
+            foreach (var list in routines.Values)
+            {
+                if (list.Count > 0 && list.All(r => r.IsCompleted))
+                    count++;
+            }
+            return count;
+        }
     }
 }
