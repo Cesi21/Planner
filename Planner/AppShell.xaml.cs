@@ -7,6 +7,7 @@ namespace Planner
             InitializeComponent();
             Routing.RegisterRoute(nameof(Views.RoutineListPage), typeof(Views.RoutineListPage));
             Routing.RegisterRoute(nameof(Views.GoalListPage), typeof(Views.GoalListPage));
+            Routing.RegisterRoute(nameof(Views.CalendarPage), typeof(Views.CalendarPage));
         }
     }
 }

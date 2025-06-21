@@ -2,17 +2,35 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Planner.Views.RoutineListPage" x:Name="Page">
-    <StackLayout Padding="20" Spacing="20">
-        <Button Text="Add Routine" Command="{Binding AddRoutineCommand}" />
-        <CollectionView ItemsSource="{Binding Routines}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid ColumnDefinitions="Auto,*" Padding="0,5">
-                        <CheckBox IsChecked="{Binding IsCompleted}" CheckedChanged="OnRoutineChecked" />
-                        <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Center" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </StackLayout>
+    <Grid>
+        <StackLayout Padding="20" Spacing="10">
+            <CollectionView ItemsSource="{Binding Routines}">
+                <CollectionView.EmptyView>
+                    <Label Text="No routines scheduled for today." HorizontalOptions="Center" VerticalOptions="Center" />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="Delete" BackgroundColor="Red" Command="{Binding Source={x:Reference Page}, Path=BindingContext.DeleteRoutineCommand}" CommandParameter="{Binding .}" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Frame Padding="10" Margin="0,5" HasShadow="True" BackgroundColor="White" CornerRadius="8">
+                                <Grid ColumnDefinitions="Auto,*" VerticalOptions="Center">
+                                    <CheckBox IsChecked="{Binding IsCompleted}" CheckedChanged="OnRoutineChecked" VerticalOptions="Center" />
+                                    <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Center">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.EditRoutineCommand}" CommandParameter="{Binding .}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+                            </Frame>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+        <Button Text="+" Command="{Binding AddRoutineCommand}" WidthRequest="50" HeightRequest="50" CornerRadius="25" BackgroundColor="DodgerBlue" TextColor="White" FontSize="24" HorizontalOptions="End" VerticalOptions="End" Margin="20" />
+    </Grid>
 </ContentPage>

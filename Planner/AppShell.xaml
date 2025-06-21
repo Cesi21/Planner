@@ -3,14 +3,13 @@
     x:Class="Planner.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Planner"
     xmlns:views="clr-namespace:Planner.Views"
     Title="Planner">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Title="Calendar"
+        ContentTemplate="{DataTemplate views:CalendarPage}"
+        Route="CalendarPage" />
     <ShellContent
         Title="Routines"
         ContentTemplate="{DataTemplate views:RoutineListPage}"
@@ -19,8 +18,4 @@
         Title="Goals"
         ContentTemplate="{DataTemplate views:GoalListPage}"
         Route="GoalListPage" />
-    <ShellContent
-        Title="Calendar"
-        ContentTemplate="{DataTemplate views:CalendarPage}"
-        Route="CalendarPage" />
 </Shell>

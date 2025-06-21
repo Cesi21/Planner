@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Maui.Storage;
@@ -63,6 +64,36 @@ namespace Planner.Services
                 routines.Add(routine);
 
             await SaveAsync();
+        }
+
+        public async Task DeleteRoutineAsync(Guid id, DateTime date)
+        {
+            await LoadAsync();
+            var key = date.ToString("yyyy-MM-dd");
+            if (_routinesByDate.TryGetValue(key, out var routines))
+            {
+                var r = routines.FirstOrDefault(x => x.Id == id);
+                if (r != null)
+                {
+                    routines.Remove(r);
+                    if (routines.Count == 0)
+                        _routinesByDate.Remove(key);
+                    await SaveAsync();
+                }
+            }
+        }
+
+        public async Task<Dictionary<DateTime, List<Routine>>> GetRoutinesForDates(IEnumerable<DateTime> dates)
+        {
+            await LoadAsync();
+            var result = new Dictionary<DateTime, List<Routine>>();
+            foreach (var date in dates)
+            {
+                var key = date.ToString("yyyy-MM-dd");
+                if (_routinesByDate.TryGetValue(key, out var routines))
+                    result[date] = new List<Routine>(routines);
+            }
+            return result;
         }
     }
 }
