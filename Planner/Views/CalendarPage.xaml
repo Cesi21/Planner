@@ -6,43 +6,73 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:SelectedDateBgConverter x:Key="SelectedDateBgConverter" />
+            <converters:CompletionColorConverter x:Key="CompletionColorConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <StackLayout Padding="20" Spacing="10">
-        <Label Text="{Binding MonthTitle}" HorizontalOptions="Center" FontAttributes="Bold" />
-        <CollectionView ItemsSource="{Binding Days}" SelectionMode="None">
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" Span="7" />
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Border Padding="5" BackgroundColor="{Binding Converter={StaticResource SelectedDateBgConverter}, ConverterParameter={x:Reference Page}}">
-                        <Label Text="{Binding ., StringFormat='{0:dd}'}" HorizontalOptions="Center" VerticalOptions="Center">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.SelectDateCommand}" CommandParameter="{Binding .}" />
-                            </Label.GestureRecognizers>
-                        </Label>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        <Button Text="+" Command="{Binding AddRoutineCommand}" HorizontalOptions="End" />
-        <Label Text="No routines scheduled" IsVisible="False">
-            <Label.Triggers>
-                <DataTrigger TargetType="Label" Binding="{Binding Routines.Count}" Value="0">
-                    <Setter Property="IsVisible" Value="True" />
-                </DataTrigger>
-            </Label.Triggers>
-        </Label>
-        <CollectionView ItemsSource="{Binding Routines}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid ColumnDefinitions="Auto,*" Padding="0,5">
-                        <CheckBox IsChecked="{Binding IsCompleted}" CheckedChanged="OnRoutineChecked" />
-                        <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Center" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </StackLayout>
+    <Grid>
+        <ScrollView>
+            <StackLayout Padding="20" Spacing="10">
+                <Label Text="{Binding MonthTitle}" HorizontalOptions="Center" FontAttributes="Bold" />
+                <CollectionView ItemsSource="{Binding Days}" SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="7" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="3">
+                                <Border BackgroundColor="{Binding Converter={StaticResource SelectedDateBgConverter}, ConverterParameter={x:Reference Page}}" Stroke="LightGray" CornerRadius="6">
+                                    <Grid>
+                                        <Label Text="{Binding ., StringFormat='{0:dd}'}" HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.SelectDateCommand}" CommandParameter="{Binding .}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <Ellipse Fill="{Binding Converter={StaticResource CompletionColorConverter}, ConverterParameter={x:Reference Page}}" WidthRequest="8" HeightRequest="8" HorizontalOptions="End" VerticalOptions="End" Margin="2" />
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Label Text="{Binding CompletionSummary}" FontAttributes="Italic" IsVisible="True">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding Routines.Count}" Value="0">
+                            <Setter Property="IsVisible" Value="False" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+                <Label Text="No routines scheduled for this day." IsVisible="False">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding Routines.Count}" Value="0">
+                            <Setter Property="IsVisible" Value="True" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+                <CollectionView ItemsSource="{Binding Routines}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem Text="Delete" BackgroundColor="Red" Command="{Binding Source={x:Reference Page}, Path=BindingContext.DeleteRoutineCommand}" CommandParameter="{Binding .}" />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <Frame Padding="10" Margin="0,5" HasShadow="True" BackgroundColor="White" CornerRadius="8">
+                                    <Grid ColumnDefinitions="Auto,*" VerticalOptions="Center">
+                                        <CheckBox IsChecked="{Binding IsCompleted}" CheckedChanged="OnRoutineChecked" VerticalOptions="Center" />
+                                        <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Center">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.EditRoutineCommand}" CommandParameter="{Binding .}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                    </Grid>
+                                </Frame>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </ScrollView>
+        <Button Text="+" Command="{Binding AddRoutineCommand}" WidthRequest="50" HeightRequest="50" CornerRadius="25" BackgroundColor="DodgerBlue" TextColor="White" FontSize="24" HorizontalOptions="End" VerticalOptions="End" Margin="20" />
+    </Grid>
 </ContentPage>
