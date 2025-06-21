@@ -23,10 +23,13 @@ namespace Planner
 #endif
 
             builder.Services.AddSingleton<DataService>();
+            builder.Services.AddSingleton<RoutineService>();
             builder.Services.AddTransient<GoalListViewModel>();
             builder.Services.AddTransient<RoutineListViewModel>();
+            builder.Services.AddTransient<CalendarViewModel>();
             builder.Services.AddTransient<GoalListPage>();
             builder.Services.AddTransient<RoutineListPage>();
+            builder.Services.AddTransient<CalendarPage>();
 
             return builder.Build();
         }

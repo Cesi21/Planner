@@ -19,4 +19,8 @@
         Title="Goals"
         ContentTemplate="{DataTemplate views:GoalListPage}"
         Route="GoalListPage" />
+    <ShellContent
+        Title="Calendar"
+        ContentTemplate="{DataTemplate views:CalendarPage}"
+        Route="CalendarPage" />
 </Shell>

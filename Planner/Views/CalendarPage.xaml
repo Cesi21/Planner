@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:Planner.Converters"
+             x:Class="Planner.Views.CalendarPage" x:Name="Page">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:SelectedDateBgConverter x:Key="SelectedDateBgConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout Padding="20" Spacing="10">
+        <Label Text="{Binding MonthTitle}" HorizontalOptions="Center" FontAttributes="Bold" />
+        <CollectionView ItemsSource="{Binding Days}" SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="7" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="5" BackgroundColor="{Binding Converter={StaticResource SelectedDateBgConverter}, ConverterParameter={x:Reference Page}}">
+                        <Label Text="{Binding ., StringFormat='{0:dd}'}" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.SelectDateCommand}" CommandParameter="{Binding .}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button Text="+" Command="{Binding AddRoutineCommand}" HorizontalOptions="End" />
+        <Label Text="No routines scheduled" IsVisible="False">
+            <Label.Triggers>
+                <DataTrigger TargetType="Label" Binding="{Binding Routines.Count}" Value="0">
+                    <Setter Property="IsVisible" Value="True" />
+                </DataTrigger>
+            </Label.Triggers>
+        </Label>
+        <CollectionView ItemsSource="{Binding Routines}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="Auto,*" Padding="0,5">
+                        <CheckBox IsChecked="{Binding IsCompleted}" CheckedChanged="OnRoutineChecked" />
+                        <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>
