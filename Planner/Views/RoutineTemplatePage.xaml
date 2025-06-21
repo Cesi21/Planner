@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:Planner.Converters"
+             x:Class="Planner.Views.RoutineTemplatePage"
+             x:Name="Page">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:RepeatDaysConverter x:Key="RepeatDaysConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <StackLayout Padding="20" Spacing="10">
+            <CollectionView ItemsSource="{Binding Templates}">
+                <CollectionView.EmptyView>
+                    <Label Text="No templates defined." HorizontalOptions="Center" />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="Delete" BackgroundColor="Red" Command="{Binding Source={x:Reference Page}, Path=BindingContext.DeleteTemplateCommand}" CommandParameter="{Binding .}" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Frame Padding="10" Margin="0,5" HasShadow="True" BackgroundColor="White" CornerRadius="8">
+                                <StackLayout>
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                    <Label Text="{Binding RepeatOnDays, Converter={StaticResource RepeatDaysConverter}}" FontAttributes="Italic" FontSize="12" />
+                                </StackLayout>
+                            </Frame>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+        <Button Text="+" Command="{Binding AddTemplateCommand}" WidthRequest="50" HeightRequest="50" CornerRadius="25" BackgroundColor="DodgerBlue" TextColor="White" FontSize="24" HorizontalOptions="End" VerticalOptions="End" Margin="20" />
+    </Grid>
+</ContentPage>

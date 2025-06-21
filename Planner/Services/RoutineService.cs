@@ -12,11 +12,15 @@ namespace Planner.Services
     public class RoutineService
     {
         private readonly string _filePath;
+        private readonly string _templatesPath;
         private Dictionary<string, List<Routine>> _routinesByDate = new();
+        private List<Routine> _templates = new();
+        private DateTime _generatedForDate = DateTime.MinValue;
 
         public RoutineService()
         {
             _filePath = Path.Combine(FileSystem.AppDataDirectory, "routines.json");
+            _templatesPath = Path.Combine(FileSystem.AppDataDirectory, "routine_templates.json");
         }
 
         private async Task LoadAsync()
@@ -26,6 +30,24 @@ namespace Planner.Services
                 var json = await File.ReadAllTextAsync(_filePath);
                 _routinesByDate = JsonSerializer.Deserialize<Dictionary<string, List<Routine>>>(json) ?? new();
             }
+        }
+
+        private async Task LoadTemplatesAsync()
+        {
+            if (File.Exists(_templatesPath))
+            {
+                var json = await File.ReadAllTextAsync(_templatesPath);
+                _templates = JsonSerializer.Deserialize<List<Routine>>(json) ?? new();
+            }
+        }
+
+        private async Task SaveTemplatesAsync()
+        {
+            var json = JsonSerializer.Serialize(_templates, new JsonSerializerOptions { WriteIndented = true });
+            var directory = Path.GetDirectoryName(_templatesPath);
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                Directory.CreateDirectory(directory!);
+            await File.WriteAllTextAsync(_templatesPath, json);
         }
 
         private async Task SaveAsync()
@@ -133,6 +155,74 @@ namespace Planner.Services
                     count++;
             }
             return count;
+        }
+
+        public async Task<List<Routine>> GetTemplatesAsync()
+        {
+            await LoadTemplatesAsync();
+            return _templates;
+        }
+
+        public async Task AddOrUpdateTemplateAsync(Routine template)
+        {
+            await LoadTemplatesAsync();
+            template.IsTemplate = true;
+            var index = _templates.FindIndex(t => t.Id == template.Id);
+            if (index >= 0)
+                _templates[index] = template;
+            else
+                _templates.Add(template);
+            await SaveTemplatesAsync();
+        }
+
+        public async Task DeleteTemplateAsync(Guid id)
+        {
+            await LoadTemplatesAsync();
+            var existing = _templates.FirstOrDefault(t => t.Id == id);
+            if (existing != null)
+            {
+                _templates.Remove(existing);
+                await SaveTemplatesAsync();
+            }
+        }
+
+        public async Task GenerateDailyRoutinesFromTemplates(DateTime date)
+        {
+            if (_generatedForDate == date.Date)
+                return;
+
+            _generatedForDate = date.Date;
+
+            await LoadAsync();
+            await LoadTemplatesAsync();
+
+            var key = date.ToString("yyyy-MM-dd");
+            if (!_routinesByDate.TryGetValue(key, out var routines))
+            {
+                routines = new List<Routine>();
+                _routinesByDate[key] = routines;
+            }
+
+            foreach (var template in _templates)
+            {
+                if (template.RepeatOnDays?.Contains(date.DayOfWeek) == true)
+                {
+                    if (!routines.Any(r => r.Name == template.Name))
+                    {
+                        var r = new Routine
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = template.Name,
+                            RepeatInterval = template.RepeatInterval,
+                            Date = date,
+                            IsCompleted = false
+                        };
+                        routines.Add(r);
+                    }
+                }
+            }
+
+            await SaveAsync();
         }
     }
 }
