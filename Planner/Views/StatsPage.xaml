@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Planner.Views.StatsPage"
+             x:Name="Page">
+    <Grid>
+        <ScrollView>
+            <StackLayout Padding="20" Spacing="20">
+                <Frame HasShadow="True" CornerRadius="12" Padding="20"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
+                    <StackLayout Spacing="10">
+                        <Label Text="{Binding WeekRangeTitle}" HorizontalOptions="Center" FontAttributes="Bold" />
+                        <Label Text="{Binding RoutinesCompleted, StringFormat='✅  {0} routines completed'}" HorizontalOptions="Center" />
+                        <Label Text="{Binding FullCompletionDays, StringFormat='🔁  {0} days fully completed'}" HorizontalOptions="Center" />
+                        <Label Text="{Binding CompletionPercentage, StringFormat='📈  {0:F0}% completion rate'}" HorizontalOptions="Center" />
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
