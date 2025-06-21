@@ -20,7 +20,10 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Padding="3">
-                                <Border BackgroundColor="{Binding Converter={StaticResource SelectedDateBgConverter}, ConverterParameter={x:Reference Page}}" Stroke="LightGray" CornerRadius="6">
+                                <Border BackgroundColor="{Binding Converter={StaticResource SelectedDateBgConverter}, ConverterParameter={x:Reference Page}}" Stroke="LightGray" >
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="6" />
+                                    </Border.StrokeShape>
                                     <Grid>
                                         <Label Text="{Binding ., StringFormat='{0:dd}'}" HorizontalOptions="Center" VerticalOptions="Center">
                                             <Label.GestureRecognizers>
