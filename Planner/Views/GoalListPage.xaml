@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Planner.Views.GoalListPage">
+             x:Class="Planner.Views.GoalListPage"
+             x:Name="Page">
     <StackLayout Padding="20" Spacing="20">
         <Button Text="Add Goal" Command="{Binding AddGoalCommand}" />
         <CollectionView ItemsSource="{Binding Goals}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Orientation="Horizontal" Spacing="10">
-                        <Label Text="{Binding Title}" FontSize="18" />
-                        <Label Text="{Binding DueDate, StringFormat=' {0:d}'}" />
-                    </StackLayout>
+                    <Grid Padding="0,5" ColumnDefinitions="*,Auto">
+                        <Grid.Triggers>
+                            <DataTrigger TargetType="Grid" Binding="{Binding IsCompleted}" Value="True">
+                                <Setter Property="Opacity" Value="0.5" />
+                            </DataTrigger>
+                        </Grid.Triggers>
+                        <StackLayout>
+                            <Label Text="{Binding Title}" FontSize="18" />
+                            <ProgressBar Progress="{Binding Progress}" HeightRequest="10" />
+                            <Label Text="{Binding Progress, StringFormat='{0:P0}'}" FontSize="12" />
+                        </StackLayout>
+                        <Button Grid.Column="1" Text="+" Clicked="OnIncrementGoal" CommandParameter="{Binding .}">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button" Binding="{Binding IsCompleted}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                    </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

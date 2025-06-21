@@ -18,5 +18,13 @@ namespace Planner.Views
         {
             await _vm.LoadAsync();
         }
+
+        private void OnIncrementGoal(object? sender, EventArgs e)
+        {
+            if (sender is Button btn && btn.CommandParameter is Planner.Models.Goal goal)
+            {
+                _vm.IncrementGoalCommand.Execute(goal);
+            }
+        }
     }
 }
