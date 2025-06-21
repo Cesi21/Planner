@@ -18,5 +18,13 @@ namespace Planner.Views
         {
             await _vm.LoadAsync();
         }
+
+        private void OnRoutineChecked(object? sender, CheckedChangedEventArgs e)
+        {
+            if (sender is CheckBox cb && cb.BindingContext is Planner.Models.Routine routine)
+            {
+                _vm.ToggleRoutineCommand.Execute(routine);
+            }
+        }
     }
 }
