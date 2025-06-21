@@ -40,6 +40,7 @@ namespace Planner.ViewModels
 
         public async Task LoadAsync()
         {
+            await _routineService.GenerateDailyRoutinesFromTemplates(DateTime.Today);
             await LoadRoutinesAsync();
             await LoadDayStatusesAsync();
         }

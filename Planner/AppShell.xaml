@@ -15,6 +15,10 @@
         ContentTemplate="{DataTemplate views:RoutineListPage}"
         Route="RoutineListPage" />
     <ShellContent
+        Title="Routine Templates"
+        ContentTemplate="{DataTemplate views:RoutineTemplatePage}"
+        Route="RoutineTemplatePage" />
+    <ShellContent
         Title="Goals"
         ContentTemplate="{DataTemplate views:GoalListPage}"
         Route="GoalListPage" />

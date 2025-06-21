@@ -21,6 +21,7 @@ namespace Planner.ViewModels
 
         public async Task LoadAsync()
         {
+            await _routineService.GenerateDailyRoutinesFromTemplates(DateTime.Today);
             Routines = await _routineService.GetRoutinesByDate(DateTime.Today);
         }
 
