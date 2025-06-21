@@ -7,9 +7,9 @@
         <CollectionView ItemsSource="{Binding Routines}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid ColumnDefinitions="*,Auto" Padding="0,5">
-                        <Label Text="{Binding Name}" VerticalOptions="Center" />
-                        <Button Grid.Column="1" Text="Toggle" Command="{Binding BindingContext.ToggleRoutineCommand, Source={x:Reference Page}}" CommandParameter="{Binding .}" />
+                    <Grid ColumnDefinitions="Auto,*" Padding="0,5">
+                        <CheckBox IsChecked="{Binding IsCompleted}" CheckedChanged="OnRoutineChecked" />
+                        <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Center" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

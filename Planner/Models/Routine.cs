@@ -9,5 +9,11 @@ namespace Planner.Models
         public string RepeatInterval { get; set; } = "Daily"; // Daily/Weekly/etc.
         public DateTime? LastCompletedDate { get; set; }
         public int StreakCount { get; set; }
+
+        // Date this routine entry applies to
+        public DateTime Date { get; set; } = DateTime.Today;
+
+        // Indicates if the routine has been completed for the given date
+        public bool IsCompleted { get; set; }
     }
 }

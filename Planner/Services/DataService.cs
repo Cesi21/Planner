@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text.Json;
+using System.Linq;
 using Microsoft.Maui.Storage;
 using Planner.Models;
 
@@ -32,6 +33,8 @@ namespace Planner.Services
                 Directory.CreateDirectory(directory);
             await File.WriteAllTextAsync(_filePath, json);
         }
+
+        private string TodayKey => DateTime.Today.ToString("yyyy-MM-dd");
 
         public async Task<List<Goal>> GetGoalsAsync()
         {
@@ -68,6 +71,44 @@ namespace Planner.Services
             await LoadAsync();
             _data.Routines.Add(routine);
             await SaveAsync();
+        }
+
+        public async Task<List<Routine>> GetTodayRoutinesAsync()
+        {
+            await LoadAsync();
+
+            if (!_data.RoutineProgress.TryGetValue(TodayKey, out var routines))
+            {
+                routines = _data.Routines.Select(r => new Routine
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    RepeatInterval = r.RepeatInterval,
+                    LastCompletedDate = r.LastCompletedDate,
+                    StreakCount = r.StreakCount,
+                    Date = DateTime.Today,
+                    IsCompleted = false
+                }).ToList();
+                _data.RoutineProgress[TodayKey] = routines;
+                await SaveAsync();
+            }
+
+            return routines;
+        }
+
+        public async Task UpdateTodayRoutineAsync(Routine routine)
+        {
+            await LoadAsync();
+
+            if (_data.RoutineProgress.TryGetValue(TodayKey, out var routines))
+            {
+                var index = routines.FindIndex(r => r.Id == routine.Id);
+                if (index >= 0)
+                {
+                    routines[index] = routine;
+                    await SaveAsync();
+                }
+            }
         }
     }
 }

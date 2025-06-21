@@ -20,24 +20,14 @@ namespace Planner.ViewModels
 
         public async Task LoadAsync()
         {
-            Routines = await _dataService.GetRoutinesAsync();
+            Routines = await _dataService.GetTodayRoutinesAsync();
         }
 
         [RelayCommand]
         private async Task ToggleRoutine(Routine routine)
         {
-            if (routine.LastCompletedDate?.Date == DateTime.Today)
-            {
-                routine.LastCompletedDate = null;
-                routine.StreakCount = Math.Max(0, routine.StreakCount - 1);
-            }
-            else
-            {
-                routine.LastCompletedDate = DateTime.Today;
-                routine.StreakCount++;
-            }
-
-            await _dataService.UpdateRoutineAsync(routine);
+            routine.IsCompleted = !routine.IsCompleted;
+            await _dataService.UpdateTodayRoutineAsync(routine);
             await LoadAsync();
         }
 
