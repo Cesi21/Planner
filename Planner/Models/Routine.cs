@@ -22,5 +22,11 @@ namespace Planner.Models
 
         // Indicates if the routine has been completed for the given date
         public bool IsCompleted { get; set; }
+
+        // Time of day the reminder should fire. Null if no reminder
+        public TimeSpan? ReminderTime { get; set; }
+
+        // Whether a reminder is enabled for this routine
+        public bool IsReminderEnabled { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Planner.Services;
+using Plugin.LocalNotification;
 using Planner.ViewModels;
 using Planner.Views;
 
@@ -12,6 +13,7 @@ namespace Planner
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseLocalNotification()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -24,6 +26,7 @@ namespace Planner
 
             builder.Services.AddSingleton<DataService>();
             builder.Services.AddSingleton<RoutineService>();
+            builder.Services.AddSingleton<ReminderService>();
             builder.Services.AddTransient<GoalListViewModel>();
             builder.Services.AddTransient<RoutineListViewModel>();
             builder.Services.AddTransient<RoutineTemplateViewModel>();
